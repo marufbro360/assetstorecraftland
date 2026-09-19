@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FF ASSETS STORE</title>
+<meta name="description" content="FF ASSETS STORE — Free Fire Craftland Assets">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root{
+  --bg:#06152b;--bg2:#0a2140;--card:#0d2748;--card2:#102f55;
+  --text:#f5f8ff;--muted:#9fb2ca;--blue:#258cff;--blue2:#56b4ff;
+  --white:#fff;--line:#244568;--danger:#ff5266;--gold:#ffd34e;
+}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(145deg,#041126,#082344 55%,#06152b);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:rgba(4,17,38,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+.top{max-width:1200px;margin:auto;padding:13px 18px;display:flex;align-items:center;gap:14px}
+.logo{font-weight:900;font-size:23px;line-height:1.05;letter-spacing:.3px}.logo span{color:#58b7ff}.made{font-size:12px;color:#9db2cc;margin-top:5px}
+.spacer{flex:1}.btn{border:1px solid #b9d8f7;border-radius:12px;padding:10px 14px;font-weight:800;background:white;color:#09213e}.btn.blue{background:var(--blue);color:#fff;border-color:#65b7ff}.btn.ghost{background:#0b213d;color:#fff;border-color:#315273}.btn.danger{background:#ff5365;color:#fff;border-color:#ff7180}
+nav{max-width:1200px;margin:auto;display:flex;gap:8px;padding:0 12px 10px;overflow:auto}nav button{white-space:nowrap}
+main{max-width:1200px;margin:auto;padding:18px 16px 100px}.hero{background:linear-gradient(120deg,#0b2c53,#0a1d38);border:1px solid #2d5d8e;border-radius:24px;padding:30px;margin-bottom:18px}
+.hero h1{font-size:42px;margin:0 0 10px}.hero h1 span{color:#55b7ff}.hero p{color:#b5c8df;font-weight:700;letter-spacing:1px}.hero .actions{display:flex;gap:10px;flex-wrap:wrap}
+.search{display:flex;gap:8px;margin:16px 0}.search input{flex:1}.field{width:100%;background:#081b34;border:1px solid #315273;color:#fff;border-radius:13px;padding:13px 14px;outline:none}.field:focus{border-color:#5db7ff}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:10px}.section-title{display:flex;align-items:center;gap:10px;justify-content:space-between;margin:28px 0 12px}.section-title h2{margin:0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.asset{background:linear-gradient(160deg,#0c2645,#0a1c33);border:1px solid #284b70;border-radius:18px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.18)}
+.preview{width:100%;aspect-ratio:16/9;background:#06101e;display:block;object-fit:cover}.body{padding:13px}.name{font-size:19px;font-weight:900;margin-bottom:6px}.meta{color:#a9bed5;font-size:13px;margin:4px 0}.code{color:#6fc1ff;font-weight:800}.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.chip{font-size:11px;border:1px solid #355879;padding:5px 8px;border-radius:999px;color:#c8ddf1;background:#0a2039}
+.stats{display:flex;gap:12px;color:#b6c8dc;font-size:13px;margin:9px 0}.actions2{display:grid;grid-template-columns:1fr 1fr;gap:7px}.actions2 button{padding:9px 6px;border-radius:10px;background:#0b2039;color:#fff;border:1px solid #315273;font-weight:800}.actions2 .primary{background:var(--blue);border-color:#65b7ff}.actions2 .active{background:#fff;color:#09213e}
+.empty{text-align:center;padding:45px;color:#9eb3ca;border:1px dashed #315273;border-radius:16px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}.modal.show{display:flex}.modalbox{width:min(620px,100%);max-height:90vh;overflow:auto;background:#0a203b;border:1px solid #315273;border-radius:20px;padding:20px}.modalbox h2{margin-top:0}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.close{float:right;background:none;border:0;color:#fff;font-size:25px}.comments{max-height:220px;overflow:auto}.comment{padding:9px;border-bottom:1px solid #24415e}.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#fff;color:#09213e;padding:11px 16px;border-radius:12px;font-weight:800;display:none;z-index:80}.toast.show{display:block}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(4,16,33,.97);border-top:1px solid #274766;z-index:25;display:flex;justify-content:center}.bottom-inner{width:min(760px,100%);display:grid;grid-template-columns:repeat(5,1fr);align-items:center}.bottom button{background:none;border:0;color:#aebfd2;padding:10px 5px;font-weight:800}.bottom button.active{color:#55b7ff}.upload-fab{background:#fff!important;color:#09213e!important;border-radius:50%;font-size:21px!important;margin:4px auto;padding:8px!important;width:62px;height:62px;line-height:1.05}.upload-fab small{display:block;font-size:11px;margin-top:2px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:32px}.top{padding:12px}.made{display:none}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.filters,.row{grid-template-columns:1fr}.logo{font-size:18px}.hero{padding:22px}.hero h1{font-size:29px}.top .btn{padding:8px 10px}.bottom-inner{grid-template-columns:repeat(5,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div><div class="logo">📦 <span>FF</span> ASSETS STORE</div><div class="made">Made By : Crafter Maruf</div></div>
+    <div class="spacer"></div>
+    <button class="btn blue" onclick="loginGoogle()">🔐 Sign in with Google</button>
+    <button class="btn ghost" onclick="openAdmin()">👑 VIP Admin</button><button class="btn ghost" onclick="toggleTheme()">☀️/🌙</button>
+  </div>
+  <nav>
+    <button class="btn ghost" onclick="showPage('home')">🏠 Home</button>
+    <button class="btn ghost" onclick="showPage('my')">👤 My Uploads</button>
+    <button class="btn ghost" onclick="showPage('fav')">⭐ Favourite</button>
+    <button class="btn ghost" onclick="openProfile()">Profile</button>
+  </nav>
+</header>
+
+<main>
+<section id="homePage">
+  <div class="hero">
+    <h1><span>FF ASSETS</span> STORE</h1>
+    <p>DISCOVER • SHARE • DOWNLOAD • CREATE</p>
+    <div class="actions"><button class="btn blue" onclick="openUpload()">＋ Upload Your Asset</button><button class="btn" onclick="scrollToAssets()">🔥 Trending Assets</button></div>
+  </div>
+  <div class="search"><input id="search" class="field" placeholder="Search Asset Name or Asset Code" oninput="loadAssets()"><button class="btn blue" onclick="loadAssets()">🔎</button></div>
+  <div class="filters"><select id="category" class="field" onchange="loadAssets()"><option value="">All Categories</option><option>HUD</option><option>Panel</option><option>Texture</option><option>Script</option><option>Map Asset</option><option>UI</option><option>Other</option></select><select id="sort" class="field" onchange="loadAssets()"><option value="trending">🔥 Trending</option><option value="latest">🆕 Latest</option><option value="downloads">⬇ Most Downloaded</option></select></div>
+  <div class="section-title"><h2>🔥 Trending Assets</h2><button class="btn blue" onclick="openUpload()">＋ Upload</button></div>
+  <div id="assetGrid" class="grid"></div>
+</section>
+
+<section id="myPage" style="display:none"><div class="section-title"><h2>👤 My Uploads</h2><button class="btn blue" onclick="openUpload()">＋ Upload</button></div><div id="myGrid" class="grid"></div></section>
+<section id="favPage" style="display:none"><div class="section-title"><h2>⭐ Favourite Assets</h2></div><div id="favGrid" class="grid"></div></section>
+</main>
+
+<div class="bottom"><div class="bottom-inner">
+<button onclick="showPage('home')" id="navHome" class="active">🏠<br>Home</button>
+<button onclick="showPage('my')" id="navMy">▣<br>My Uploads</button>
+<button onclick="openUpload()" class="upload-fab">＋<small>Upload</small></button>
+<button onclick="showPage('fav')" id="navFav">☆<br>Favourite</button>
+<button onclick="openProfile()" id="navProfile">👤<br>Profile</button>
+</div></div>
+
+<div id="uploadModal" class="modal"><div class="modalbox">
+<button class="close" onclick="closeModal('uploadModal')">×</button><h2>📦 Upload Asset</h2>
+<p id="loginHint" class="meta">Google Login is required before uploading.</p>
+<input id="aName" class="field" placeholder="Asset Name *"><br><br>
+<input id="aCode" class="field" placeholder="Asset Code *"><br><br>
+<select id="aServer" class="field"><option value="">Asset Server (optional)</option><option>Bangladesh</option><option>India</option><option>Pakistan</option><option>Singapore</option><option>Indonesia</option><option>Malaysia</option><option>Thailand</option><option>Vietnam</option><option>Taiwan</option><option>Middle East</option><option>Europe</option><option>CIS</option><option>Brazil</option><option>Latin America</option><option>North America</option><option>Global / All Servers</option></select><br><br>
+<select id="aCat" class="field"><option value="">Category (optional)</option><option>HUD</option><option>Panel</option><option>Texture</option><option>Script</option><option>Map Asset</option><option>UI</option><option>Other</option></select><br><br>
+<input id="aImage" class="field" type="file" accept="image/*" onchange="previewUploadImage()"><br><img id="uploadPreview" style="display:none;width:100%;max-height:260px;object-fit:cover;border-radius:14px;border:1px solid #315273;margin:0 0 14px"><br>
+<select id="downloadType" class="field" onchange="changeDownloadType()"><option value="">Select Download Method *</option><option value="file">📦 Asset File</option><option value="link">🔗 Download Link</option></select><br><br>
+<div id="fileBox"><input id="aFile" class="field" type="file"></div>
+<div id="linkBox" style="display:none"><input id="aLink" class="field" type="url" placeholder="https://example.com/download"></div><br>
+<button class="btn blue" onclick="uploadAsset()">Upload Asset</button>
+</div></div>
+
+<div id="commentModal" class="modal"><div class="modalbox">
+<button class="close" onclick="closeModal('commentModal')">×</button><h2>💬 Comments</h2><div id="comments" class="comments"></div><br>
+<textarea id="commentText" class="field" placeholder="Write a comment..."></textarea><br><br><button class="btn blue" onclick="sendComment()">Post Comment</button>
+</div></div>
+
+<div id="loginModal" class="modal"><div class="modalbox"><button class="close" onclick="closeModal('loginModal')">×</button><h2>🔐 Sign in with Google</h2><p class="meta">Google Account দিয়ে Login করলে Google Account-এর নাম Creator Name হিসেবে ব্যবহার হবে।</p><div id="googleSignInButton" style="margin:16px 0"></div><p id="googleLoginMsg" class="meta"></p></div></div>
+<div id="adminModal" class="modal"><div class="modalbox">
+<button class="close" onclick="closeModal('adminModal')">×</button><h2>👑 VIP Admin</h2><p class="meta">Secret Admin Unlock</p><input id="adminSecret" class="field" type="password" placeholder="Enter admin secret"><br><br><button class="btn blue" onclick="adminUnlock()">Unlock Admin</button>
+</div></div>
+<div id="profileModal" class="modal"><div class="modalbox"><button class="close" onclick="closeModal('profileModal')">×</button><h2>👤 Profile</h2><div id="profileInfo"></div><br><button class="btn ghost" onclick="logout()">Logout</button><button class="btn" onclick="closeModal('profileModal')">Close</button></div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+const API='api.php';
+const GOOGLE_CLIENT_ID='966235464248-25i2mkk8j36aasecpbv0m54bnao6iqho.apps.googleusercontent.com';
+let me=null, admin=false, currentAsset=null, token=localStorage.getItem('ffas_google_credential')||null, pendingUpload=false;
+
+function toast(s){const t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+function api(action, data={}, isForm=false){
+  if(isForm){
+    if(token && !data.has('google_credential')) data.append('google_credential',token);
+    data.append('action',action);
+    return fetch(API,{method:'POST',body:data}).then(r=>r.json());
+  }
+  const payload={...data};
+  if(token && !payload.google_credential) payload.google_credential=token;
+  const body=new URLSearchParams({action,...payload});
+  return fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).then(r=>r.json());
+}
+function loadSession(){const x=localStorage.getItem('ffas_me');if(x)me=JSON.parse(x);token=localStorage.getItem('ffas_google_credential')||null;admin=localStorage.getItem('ffas_admin')==='1';updateAuthUI()}
+function updateAuthUI(){document.querySelectorAll('.top .btn.blue')[0].textContent=me?'👤 '+(me.name||'Account'):'🔐 Sign in with Google'}
+function loginGoogle(){
+  document.getElementById('loginModal').classList.add('show');
+  initGoogleButton();
+}
+function initGoogleButton(){
+  if(!window.google || !window.google.accounts || !window.google.accounts.id){setTimeout(initGoogleButton,400);return;}
+  google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:credentialResponse,auto_select:false,cancel_on_tap_outside:true});
+  const box=document.getElementById('googleSignInButton'); box.innerHTML='';
+  google.accounts.id.renderButton(box,{theme:'outline',size:'large',shape:'rectangular',text:'signin_with',width:300});
+}
+async function credentialResponse(r){
+  try{
+    const res=await api('google_login',{credential:r.credential});
+    if(!res.ok){document.getElementById('googleLoginMsg').textContent=res.error||'Google Login failed';return;}
+    me=res.user; token=r.credential; localStorage.setItem('ffas_me',JSON.stringify(me)); localStorage.setItem('ffas_google_credential',token);
+    updateAuthUI(); closeModal('loginModal'); toast('Google Login successful ✓');
+    if(pendingUpload){pendingUpload=false;document.getElementById('uploadModal').classList.add('show');}
+  }catch(e){document.getElementById('googleLoginMsg').textContent='Google Login failed. Check api.php / MySQL.';}
+}
+function openUpload(){if(!me||!token){pendingUpload=true;loginGoogle();return}document.getElementById('uploadModal').classList.add('show')}
+function changeDownloadType(){const t=document.getElementById('downloadType').value;document.getElementById('fileBox').style.display=t==='file'?'block':'none';document.getElementById('linkBox').style.display=t==='link'?'block':'none';document.getElementById('aFile').value='';document.getElementById('aLink').value=''}
+async function uploadAsset(){
+  if(!me||!token){openUpload();return}
+  const n=document.getElementById('aName').value.trim(), c=document.getElementById('aCode').value.trim(), dt=document.getElementById('downloadType').value;
+  if(!n||!c){toast('Asset Name and Asset Code are required');return}
+  if(!dt){toast('Select Asset File or Download Link');return}
+  if(dt==='file'&&!document.getElementById('aFile').files[0]){toast('Please select Asset File');return}
+  if(dt==='link'&&!document.getElementById('aLink').value.trim()){toast('Please enter Download Link');return}
+  const f=new FormData();f.append('name',n);f.append('code',c);f.append('server',document.getElementById('aServer').value);f.append('category',document.getElementById('aCat').value);f.append('download_type',dt);f.append('google_credential',token);
+  const im=document.getElementById('aImage').files[0];if(im)f.append('image',im);if(dt==='file')f.append('file',document.getElementById('aFile').files[0]);else f.append('download_link',document.getElementById('aLink').value.trim());
+  const r=await api('upload_asset',f,true);if(!r.ok){toast(r.error||'Upload failed');return}toast('Asset uploaded ✓');closeModal('uploadModal');loadAssets();clearUpload()
+}
+function clearUpload(){['aName','aCode','aImage','aFile','aLink'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});document.getElementById('aCat').value='';document.getElementById('aServer').value='';document.getElementById('downloadType').value='';changeDownloadType();const p=document.getElementById('uploadPreview');p.src='';p.style.display='none'}
+async function loadAssets(target='assetGrid'){
+  const q=document.getElementById('search').value,cat=document.getElementById('category').value,sort=document.getElementById('sort').value;
+  const r=await api('list_assets',{q,category:cat,sort});
+  const el=document.getElementById(target);if(!r.ok){el.innerHTML='<div class="empty">Server Connection Failed. Check api.php and MySQL.</div>';return}
+  el.innerHTML=r.assets.length?r.assets.map(assetCard).join(''):'<div class="empty">No assets found.</div>';
+}
+function assetCard(a){
+ const liked=!!a.liked,fav=!!a.favourited;
+ return `<article class="asset">
+ <img class="preview" src="${esc(a.image_url||'')}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22%3E%3Crect width=%22800%22 height=%22450%22 fill=%22%23091a31%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%239fb2ca%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2230%22%3ENo Preview%3C/text%3E%3C/svg%3E'">
+ <div class="body"><div class="name">${esc(a.name)}</div><div class="meta code">Code: ${esc(a.code)}</div><div class="meta">👤 ${esc(a.creator_name||'Creator')}</div>
+ <div class="chips">${a.server?`<span class="chip">🌐 ${esc(a.server)}</span>`:''}${a.category?`<span class="chip">🏷️ ${esc(a.category)}</span>`:''}</div>
+ <div class="stats">❤️ ${a.likes} &nbsp; ⭐ ${a.favourites} &nbsp; ⬇ ${a.downloads} &nbsp; ${a.download_type==='link'?'🔗 Link':'📦 File'}</div>
+ <div class="actions2">
+ <button class="${liked?'active':''}" onclick="toggleLike(${a.id})">❤️ ${liked?'Unlike':'Like'}</button>
+ <button class="${fav?'active':''}" onclick="toggleFav(${a.id})">⭐ ${fav?'Remove':'Favourite'}</button>
+ <button onclick="copyCode('${js(a.code)}')">📋 Copy Code</button>
+ <button class="primary" onclick="downloadAsset(${a.id})">⬇ Download</button>
+ <button onclick="openComments(${a.id})">💬 Comments</button>
+ <button onclick="reportAsset(${a.id})">🚩 Report</button>
+ ${admin?`<button class="danger" onclick="adminDelete(${a.id})">👑 Admin Delete</button>`:''}
+ ${me&&String(a.creator_id)===String(me.id)?`<button class="danger" onclick="deleteAsset(${a.id})">🗑️ Delete</button>`:''}
+ </div></div></article>`;
+}
+async function toggleLike(id){if(!me){loginGoogle();return}const r=await api('toggle_like',{asset_id:id});toast(r.message||r.error);loadAssets()}
+async function toggleFav(id){if(!me){loginGoogle();return}const r=await api('toggle_favourite',{asset_id:id});toast(r.message||r.error);loadAssets();loadFav()}
+async function downloadAsset(id){const r=await api('download_asset',{asset_id:id});if(!r.ok){toast(r.error||'File unavailable');return}window.open(r.url,'_blank');loadAssets()}
+async function deleteAsset(id){if(!confirm('Delete your asset?'))return;const r=await api('delete_asset',{asset_id:id});toast(r.message||r.error);loadAssets();loadMy()}
+async function adminDelete(id){if(!confirm('VIP Admin: delete this asset?'))return;const r=await api('admin_delete',{asset_id:id,admin_token:localStorage.getItem('ffas_admin_token')||''});toast(r.message||r.error);loadAssets()}
+function copyCode(c){navigator.clipboard?.writeText(c);toast('Asset Code copied ✓')}
+function previewUploadImage(){const f=document.getElementById('aImage').files[0],p=document.getElementById('uploadPreview');if(!f){p.style.display='none';return}p.src=URL.createObjectURL(f);p.style.display='block'}
+function openAdmin(){document.getElementById('adminModal').classList.add('show')}
+async function reportAsset(id){if(!me){loginGoogle();return}const reason=prompt('Report reason?')||'Not specified';const r=await api('report',{asset_id:id,reason});toast(r.message||r.error)}
+async function openComments(id){currentAsset=id;document.getElementById('commentModal').classList.add('show');const r=await api('comments',{asset_id:id});document.getElementById('comments').innerHTML=r.comments?.length?r.comments.map(c=>`<div class="comment"><b>${esc(c.name)}</b><br>${esc(c.text)}</div>`).join(''):'<div class="empty">No comments yet.</div>'}
+async function sendComment(){if(!me){loginGoogle();return}const t=document.getElementById('commentText').value.trim();if(!t)return;const r=await api('add_comment',{asset_id:currentAsset,text:t});toast(r.message||r.error);document.getElementById('commentText').value='';openComments(currentAsset)}
+async function adminUnlock(){const s=document.getElementById('adminSecret').value;const r=await api('admin_unlock',{secret:s});if(!r.ok){toast(r.error||'Wrong secret');return}admin=true;localStorage.setItem('ffas_admin','1');localStorage.setItem('ffas_admin_token',r.token);toast('VIP Admin unlocked ✓');closeModal('adminModal');loadAssets()}
+function openProfile(){document.getElementById('profileInfo').innerHTML=me?`<p><b>${esc(me.name)}</b></p><p>${esc(me.email||'')}</p>`:'<p>Not signed in.</p>';document.getElementById('profileModal').classList.add('show')}
+function logout(){me=null;token=null;admin=false;localStorage.removeItem('ffas_me');localStorage.removeItem('ffas_google_credential');localStorage.removeItem('ffas_admin');localStorage.removeItem('ffas_admin_token');updateAuthUI();closeModal('profileModal');toast('Logged out')}
+function showPage(p){['homePage','myPage','favPage'].forEach(x=>document.getElementById(x).style.display='none');document.getElementById(p==='home'?'homePage':p==='my'?'myPage':'favPage').style.display='block';['navHome','navMy','navFav'].forEach(x=>document.getElementById(x).classList.remove('active'));document.getElementById(p==='home'?'navHome':p==='my'?'navMy':'navFav').classList.add('active');if(p==='my')loadMy();if(p==='fav')loadFav()}
+async function loadMy(){if(!me){document.getElementById('myGrid').innerHTML='<div class="empty">Sign in with Google to see your uploads.</div>';return}const r=await api('my_uploads');document.getElementById('myGrid').innerHTML=r.assets?.map(assetCard).join('')||'<div class="empty">No uploads yet.</div>'}
+async function loadFav(){if(!me){document.getElementById('favGrid').innerHTML='<div class="empty">Sign in with Google to see favourites.</div>';return}const r=await api('favourites');document.getElementById('favGrid').innerHTML=r.assets?.map(assetCard).join('')||'<div class="empty">No favourites yet.</div>'}
+function toggleTheme(){document.body.classList.toggle('light');toast('Theme toggled')}
+function scrollToAssets(){document.getElementById('assetGrid').scrollIntoView({behavior:'smooth'})}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function js(s){return String(s??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
+loadSession();loadAssets();setTimeout(initGoogleButton,800);
+</script>
+</body>
+</html>>
