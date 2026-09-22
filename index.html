@@ -36,7 +36,7 @@ main{max-width:1200px;margin:auto;padding:18px 16px 100px}.hero{background:linea
 <body>
 <header>
   <div class="top">
-    <div><div class="logo">📦 <span>FF</span> ASSETS STORE</div><div class="made">Made By : Crafter Maruf</div></div>
+    <div><div class="logo">📦 <span>FF</span> ASSETS STORE</div><div class="made">Made By : Crafter Shihab</div></div>
     <div class="spacer"></div>
     <button class="btn blue" onclick="loginGoogle()">🔐 Sign in with Google</button>
     <button class="btn ghost" onclick="openAdmin()">👑 VIP Admin</button><button class="btn ghost" onclick="toggleTheme()">☀️/🌙</button>
@@ -76,7 +76,7 @@ main{max-width:1200px;margin:auto;padding:18px 16px 100px}.hero{background:linea
 
 <div id="uploadModal" class="modal"><div class="modalbox">
 <button class="close" onclick="closeModal('uploadModal')">×</button><h2>📦 Upload Asset</h2>
-<p id="loginHint" class="meta">Google Login is required before uploading.</p>
+<p id="loginHint" class="meta">🔐 Google Login is required before uploading. Guests cannot upload assets.</p>
 <input id="aName" class="field" placeholder="Asset Name *"><br><br>
 <input id="aCode" class="field" placeholder="Asset Code *"><br><br>
 <select id="aServer" class="field"><option value="">Asset Server (optional)</option><option>Bangladesh</option><option>India</option><option>Pakistan</option><option>Singapore</option><option>Indonesia</option><option>Malaysia</option><option>Thailand</option><option>Vietnam</option><option>Taiwan</option><option>Middle East</option><option>Europe</option><option>CIS</option><option>Brazil</option><option>Latin America</option><option>North America</option><option>Global / All Servers</option></select><br><br>
@@ -117,10 +117,23 @@ function api(action, data={}, isForm=false){
   const body=new URLSearchParams({action,...payload});
   return fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).then(r=>r.json());
 }
-function loadSession(){const x=localStorage.getItem('ffas_me');if(x)me=JSON.parse(x);token=localStorage.getItem('ffas_google_credential')||null;admin=localStorage.getItem('ffas_admin')==='1';updateAuthUI()}
+function loadSession(){
+  try{
+    const x=localStorage.getItem('ffas_me');
+    const t=localStorage.getItem('ffas_google_credential');
+    me=x?JSON.parse(x):null;
+    token=t||null;
+    if(!me || !token){ me=null; token=null; localStorage.removeItem('ffas_me'); localStorage.removeItem('ffas_google_credential'); }
+  }catch(e){
+    me=null; token=null; localStorage.removeItem('ffas_me'); localStorage.removeItem('ffas_google_credential');
+  }
+  admin=localStorage.getItem('ffas_admin')==='1';
+  updateAuthUI();
+}
 function updateAuthUI(){document.querySelectorAll('.top .btn.blue')[0].textContent=me?'👤 '+(me.name||'Account'):'🔐 Sign in with Google'}
 function loginGoogle(){
   document.getElementById('loginModal').classList.add('show');
+  document.getElementById('googleLoginMsg').textContent='';
   initGoogleButton();
 }
 function initGoogleButton(){
@@ -135,13 +148,27 @@ async function credentialResponse(r){
     if(!res.ok){document.getElementById('googleLoginMsg').textContent=res.error||'Google Login failed';return;}
     me=res.user; token=r.credential; localStorage.setItem('ffas_me',JSON.stringify(me)); localStorage.setItem('ffas_google_credential',token);
     updateAuthUI(); closeModal('loginModal'); toast('Google Login successful ✓');
-    if(pendingUpload){pendingUpload=false;document.getElementById('uploadModal').classList.add('show');}
+    if(pendingUpload){
+      pendingUpload=false;
+      document.getElementById('uploadModal').classList.add('show');
+    }
   }catch(e){document.getElementById('googleLoginMsg').textContent='Google Login failed. Check api.php / MySQL.';}
 }
-function openUpload(){if(!me||!token){pendingUpload=true;loginGoogle();return}document.getElementById('uploadModal').classList.add('show')}
+function openUpload(){
+  // Upload is Google-login protected. Never open the upload form for a guest.
+  if(!me||!token){
+    pendingUpload=true;
+    closeModal('uploadModal');
+    document.getElementById('googleLoginMsg').textContent='Please sign in with Google first. Uploading is available only after login.';
+    loginGoogle();
+    return;
+  }
+  pendingUpload=false;
+  document.getElementById('uploadModal').classList.add('show');
+}
 function changeDownloadType(){const t=document.getElementById('downloadType').value;document.getElementById('fileBox').style.display=t==='file'?'block':'none';document.getElementById('linkBox').style.display=t==='link'?'block':'none';document.getElementById('aFile').value='';document.getElementById('aLink').value=''}
 async function uploadAsset(){
-  if(!me||!token){openUpload();return}
+  if(!me||!token){pendingUpload=false;openUpload();return}
   const n=document.getElementById('aName').value.trim(), c=document.getElementById('aCode').value.trim(), dt=document.getElementById('downloadType').value;
   if(!n||!c){toast('Asset Name and Asset Code are required');return}
   if(!dt){toast('Select Asset File or Download Link');return}
@@ -160,7 +187,7 @@ async function loadAssets(target='assetGrid'){
 }
 function assetCard(a){
  const liked=!!a.liked,fav=!!a.favourited;
- return `<article class="asset">
+ return `<article class="asset" id="asset-card-${a.id}">
  <img class="preview" src="${esc(a.image_url||'')}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22%3E%3Crect width=%22800%22 height=%22450%22 fill=%22%23091a31%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%239fb2ca%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2230%22%3ENo Preview%3C/text%3E%3C/svg%3E'">
  <div class="body"><div class="name">${esc(a.name)}</div><div class="meta code">Code: ${esc(a.code)}</div><div class="meta">👤 ${esc(a.creator_name||'Creator')}</div>
  <div class="chips">${a.server?`<span class="chip">🌐 ${esc(a.server)}</span>`:''}${a.category?`<span class="chip">🏷️ ${esc(a.category)}</span>`:''}</div>
@@ -170,6 +197,7 @@ function assetCard(a){
  <button class="${fav?'active':''}" onclick="toggleFav(${a.id})">⭐ ${fav?'Remove':'Favourite'}</button>
  <button onclick="copyCode('${js(a.code)}')">📋 Copy Code</button>
  <button class="primary" onclick="downloadAsset(${a.id})">⬇ Download</button>
+ <button onclick="shareAsset(${a.id},'${js(a.name)}')">🔗 Share</button>
  <button onclick="openComments(${a.id})">💬 Comments</button>
  <button onclick="reportAsset(${a.id})">🚩 Report</button>
  ${admin?`<button class="danger" onclick="adminDelete(${a.id})">👑 Admin Delete</button>`:''}
@@ -178,9 +206,42 @@ function assetCard(a){
 }
 async function toggleLike(id){if(!me){loginGoogle();return}const r=await api('toggle_like',{asset_id:id});toast(r.message||r.error);loadAssets()}
 async function toggleFav(id){if(!me){loginGoogle();return}const r=await api('toggle_favourite',{asset_id:id});toast(r.message||r.error);loadAssets();loadFav()}
-async function downloadAsset(id){const r=await api('download_asset',{asset_id:id});if(!r.ok){toast(r.error||'File unavailable');return}window.open(r.url,'_blank');loadAssets()}
+async function downloadAsset(id){
+  // Use the server download endpoint so uploaded files are sent with
+  // Content-Disposition: attachment instead of merely opening in a new tab.
+  const url=API+'?download_id='+encodeURIComponent(id);
+  const a=document.createElement('a');
+  a.href=url;
+  a.target='_blank';
+  a.rel='noopener';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>loadAssets(),500);
+}
 async function deleteAsset(id){if(!confirm('Delete your asset?'))return;const r=await api('delete_asset',{asset_id:id});toast(r.message||r.error);loadAssets();loadMy()}
 async function adminDelete(id){if(!confirm('VIP Admin: delete this asset?'))return;const r=await api('admin_delete',{asset_id:id,admin_token:localStorage.getItem('ffas_admin_token')||''});toast(r.message||r.error);loadAssets()}
+async function shareAsset(id,name){
+  const url=new URL(window.location.href);
+  url.search='';
+  url.hash='';
+  url.searchParams.set('asset',String(id));
+  const shareUrl=url.toString();
+  try{
+    if(navigator.share){
+      await navigator.share({title:name||'FF ASSETS STORE Asset',text:'Check this asset on FF ASSETS STORE',url:shareUrl});
+      toast('Asset shared ✓');
+    }else if(navigator.clipboard){
+      await navigator.clipboard.writeText(shareUrl);
+      toast('Asset link copied ✓');
+    }else{
+      prompt('Copy this Asset Link:',shareUrl);
+    }
+  }catch(e){
+    if(e && e.name==='AbortError') return;
+    try{await navigator.clipboard.writeText(shareUrl);toast('Asset link copied ✓')}catch(_){prompt('Copy this Asset Link:',shareUrl)}
+  }
+}
 function copyCode(c){navigator.clipboard?.writeText(c);toast('Asset Code copied ✓')}
 function previewUploadImage(){const f=document.getElementById('aImage').files[0],p=document.getElementById('uploadPreview');if(!f){p.style.display='none';return}p.src=URL.createObjectURL(f);p.style.display='block'}
 function openAdmin(){document.getElementById('adminModal').classList.add('show')}
@@ -198,7 +259,23 @@ function scrollToAssets(){document.getElementById('assetGrid').scrollIntoView({b
 function closeModal(id){document.getElementById(id).classList.remove('show')}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function js(s){return String(s??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
-loadSession();loadAssets();setTimeout(initGoogleButton,800);
+async function openSharedAsset(){
+  const id=new URLSearchParams(window.location.search).get('asset');
+  if(!id) return;
+  // Home contains the public list, so load it first and then highlight the shared card.
+  showPage('home');
+  await loadAssets();
+  const card=document.getElementById('asset-card-'+String(id));
+  if(card){
+    card.scrollIntoView({behavior:'smooth',block:'center'});
+    card.style.outline='3px solid #55b7ff';
+    card.style.boxShadow='0 0 0 6px rgba(85,183,255,.16),0 8px 30px rgba(0,0,0,.25)';
+    setTimeout(()=>{card.style.outline='';card.style.boxShadow=''},3500);
+  }else{
+    toast('Shared asset not found');
+  }
+}
+loadSession();loadAssets().then(openSharedAsset);setTimeout(initGoogleButton,800);
 </script>
 </body>
-</html>>
+</html>
